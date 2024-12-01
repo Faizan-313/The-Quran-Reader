@@ -7,7 +7,7 @@ import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
 import { createClient } from "redis";
-import connectRedis from "connect-redis";
+import pkg from "connect-redis";
 
 env.config();
 
@@ -21,7 +21,8 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 
-const RedisStore = connectRedis(session);
+
+const RedisStore = pkg(session);
 
 const redisClient = createClient({
     url: process.env.REDIS_URL || "redis://localhost:6379",
@@ -37,11 +38,12 @@ export const sessionMiddleware = session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        secure: process.env.NODE_ENV === "production", // Secure cookies in production
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === "production",
         httpOnly: true,
     },
 });
+
 
 
 

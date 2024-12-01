@@ -4,11 +4,11 @@ import env from "dotenv";
 env.config();
 
 const db = new pg.Client({
-    PGUSER: process.env.DB_USER,
-    PGHOST: process.env.DB_HOST,
-    PGDATABASE: process.env.DB_DATABASE,
-    PGPASSWORD: process.env.DB_PASSWORD,
-    PGPORT: process.env.DB_PORT,
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT,
 });
 
 export default db;

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 db.connect();
 
-const saltround = 10;
+const saltround = process.env.SALT_ROUND;
 
 export const registerUser = async (req, res)=>{
     const {username, email, password} = req.body;

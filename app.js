@@ -6,6 +6,9 @@ import bodyParser from "body-parser";
 import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 const { createClient } = require("redis");
 const connectRedis = require("connect-redis");
 
@@ -21,9 +24,6 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 
-
-
-
 const RedisStore = connectRedis(session);
 
 const redisClient = createClient({
@@ -34,7 +34,7 @@ redisClient.connect().catch((err) => {
     console.error("Failed to connect to Redis:", err);
 });
 
-module.exports = session({
+export const sessionMiddleware = session({
     store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
@@ -45,6 +45,7 @@ module.exports = session({
         httpOnly: true,
     },
 });
+
 
 
 

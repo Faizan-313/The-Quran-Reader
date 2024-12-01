@@ -5,7 +5,7 @@ import env from "dotenv";
 import bodyParser from "body-parser";
 import seedDatabase from "./seed.js";
 import db from "./models/db.js";
-import sessionMiddleware from "./session.js";
+
 
 env.config();
 
@@ -18,7 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-app.use(sessionMiddleware);
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000*60*60*24,
+    }
+}));
+
+
+
 
 app.get("/login",(req, res)=>{
     const message = req.query.message || null;

@@ -5,12 +5,7 @@ import env from "dotenv";
 import bodyParser from "body-parser";
 import seedDatabase from "./seed.js";
 import db from "./models/db.js";
-
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-const { createClient } = require("redis");
-const connectRedis = require("connect-redis");
+import sessionMiddleware from "./session.js";
 
 env.config();
 
@@ -23,36 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-
-const RedisStore = connectRedis(session);
-
-const redisClient = createClient({
-    url: process.env.REDIS_URL || "redis://localhost:6379",
-});
-
-redisClient.connect().catch((err) => {
-    console.error("Failed to connect to Redis:", err);
-});
-
-export const sessionMiddleware = session({
-    store: new RedisStore({ client: redisClient }),
-    secret: process.env.SESSION_SECRET || "default_secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        secure: process.env.NODE_ENV === "production",
-        httpOnly: true,
-    },
-});
-
-
-
-
-
-
-
-
+app.use(sessionMiddleware);
 
 app.get("/login",(req, res)=>{
     const message = req.query.message || null;

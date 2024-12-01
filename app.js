@@ -6,6 +6,10 @@ import bodyParser from "body-parser";
 import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const { createClient } = require('redis');
+
 
 env.config();
 
@@ -18,14 +22,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 1000*60*60*24,
-    }
-}));
+
+
+const redisClient = createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379'
+});
+
+redisClient.connected().catch(console.error);
+
+app.use(
+    session({
+        store: new RedisStore({ client: redisClient }),
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 30 * 24 * 60 * 60 * 1000 
+        }
+    })
+);
+
 
 
 

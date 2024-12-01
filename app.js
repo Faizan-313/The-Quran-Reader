@@ -6,10 +6,8 @@ import bodyParser from "body-parser";
 import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
-// const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
-const { createClient } = require('redis');
-
+import { createClient } from "redis";
+import connectRedis from "connect-redis";
 
 env.config();
 
@@ -23,24 +21,28 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 
+const RedisStore = connectRedis(session);
 
 const redisClient = createClient({
-    url: process.env.REDIS_URL || 'redis://localhost:6379'
+    url: process.env.REDIS_URL || "redis://localhost:6379",
 });
 
-redisClient.connected().catch(console.error);
+redisClient.connect().catch((err) => {
+    console.error("Failed to connect to Redis:", err);
+});
 
-app.use(
-    session({
-        store: new RedisStore({ client: redisClient }),
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 30 * 24 * 60 * 60 * 1000 
-        }
-    })
-);
+export const sessionMiddleware = session({
+    store: new RedisStore({ client: redisClient }),
+    secret: process.env.SESSION_SECRET || "default_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        secure: process.env.NODE_ENV === "production", // Secure cookies in production
+        httpOnly: true,
+    },
+});
+
 
 
 

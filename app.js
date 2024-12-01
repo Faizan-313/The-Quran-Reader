@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
-const session = require('express-session');
+// const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const { createClient } = require('redis');
 

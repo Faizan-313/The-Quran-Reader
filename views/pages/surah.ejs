@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quran Reader</title>
+    <link rel="stylesheet" href="/style/surah.css">
+</head>
+<body class="surah_body">
+    <%- include("../partials/navbar.ejs") %>
+    <div class="action-buttons">
+        <form action="/saveSurah" method="POST">
+            <input type="hidden" name="surahId" value="<%= surahId %>">
+            <input type="hidden" name="noOfAyahs" value="<%= noOfAyahs %>">
+            <button type="submit" class="save-button">Mark as Saved</button>
+        </form>
+    </div>
+    <div class="surah-container">
+        <header class="surah-header">
+            <h1><%= surahName %></h1>
+            <p><strong>Number of Ayahs:</strong> <%= noOfAyahs %></p>
+        </header>
+        
+        <div class="surah-content">
+            <% surahContent.forEach((ayah, index) => { %>
+                <div class="ayah-line">
+                    <p> ◌ <%= ayah %> </p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

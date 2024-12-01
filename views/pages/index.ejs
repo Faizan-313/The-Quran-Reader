@@ -1,0 +1,35 @@
+<body class="index">
+    <%- include("../partials/navbar.ejs") %>
+    <header class="header">
+        <h1>Welcome to the Quran Reader</h1>
+    </header>
+    <main class="content">
+        <table class="surah-table">
+            <thead>
+                <tr>
+                    <th>Surah Name</th>
+                    <th>Number of Ayahs</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (surahs && surahs.length > 0) { %>
+                    <% surahs.forEach(surah => { %>
+                        <tr>
+                            <td>
+                                <a href="/surah/<%= surah.surah_name %>" class="surah-link">
+                                    <%= surah.surah_name %>
+                                </a>
+                            </td>
+                            <td><%= surah.no_of_ayah %></td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="2" class="no-data">No Surahs Found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </main>
+    <%- include("../partials/footer.ejs") %>
+</body>

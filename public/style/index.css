@@ -1,0 +1,156 @@
+/* General Reset */
+body .index{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Header Styling */
+.header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #388E3C;
+}
+
+/* Content Area */
+.content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+.surah-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.surah-table th, .surah-table td {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 12px;
+}
+
+.surah-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.surah-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.surah-table tr:hover {
+    background-color: #ddd;
+}
+
+/* Surah Link Styling */
+.surah-link {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.surah-link:hover {
+    color: #388E3C;
+}
+
+/* No Data Styling */
+.no-data {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+
+
+
+/* for saved content */
+#savedContent {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+#savedContent h1 {
+    font-size: 36px;
+    color: #007bff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.message {
+    color: #ff0000;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#savedContent ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+#savedContent li {
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 18px;
+    text-align: left;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+#savedContent li strong {
+    color: #007bff;
+    font-weight: bold;
+}
+
+#savedContent li:hover {
+    transform: scale(1.02);
+    background-color: #e6f7ff;
+}
+
+@media screen and (max-width: 768px) {
+    #savedContent h1 {
+        font-size: 28px;
+    }
+
+    #savedContent li {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #savedContent h1 {
+        font-size: 24px;
+    }
+
+    #savedContent li {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+
+

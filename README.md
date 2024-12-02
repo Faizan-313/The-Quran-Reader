@@ -1,4 +1,4 @@
-### The Quran Reader
+# The Quran Reader
 ## Description
 Quran Reader is a web application that lets users register, log in, and save their favorite Surahs from the Quran. Users can browse and view all Surahs, view their saved Surahs, and manage their personal data securely. This project is built to provide a seamless user experience for reading and saving Quranic content.
 
@@ -67,7 +67,13 @@ GET /saved: Displays saved Surahs for the logged-in user.
 GET /all: Lists all Surahs with their names and the number of Ayahs.
 Other endpoints based on project functionality.
 
-License
+## Below are some images from the project
+
+
+License![Screenshot 2024-12-02 154812](https://github.com/user-attachments/assets/e1c92979-38d8-4891-8bc7-44043904fc94)
+![Screenshot 2024-12-02 154834](https://github.com/user-attachments/assets/8f715639-4f52-46b0-aaa6-2e045126f237)
+![Screenshot 2024-12-02 154849](https://github.com/user-attachments/assets/88bc568c-aa10-4ce2-867f-78fcf2dd7c8a)
+
 This project is licensed under the MIT License.
 
 Acknowledgements

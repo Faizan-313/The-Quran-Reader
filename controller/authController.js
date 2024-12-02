@@ -1,7 +1,14 @@
 import db from "../models/db.js";
 import bcrypt from 'bcrypt';
 
-db.connect();
+
+db.connect((err) => {
+    if (err) {
+        console.error('Connection error:', err.stack);
+    } else {
+        console.log('Connected to the database!');
+    }
+});
 
 const saltround = process.env.SALT_ROUND;
 

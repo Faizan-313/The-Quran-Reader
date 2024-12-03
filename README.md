@@ -49,7 +49,7 @@ SALT_ROUNDS=10
 npm install
 Run the Application
 run the seedDatabase() function for storing the data to the database
-comment it after seeing "data feeded to database successufully"  in console
+comment it after.
 
 To start the application locally, use:
 nodemon app.js
@@ -83,3 +83,6 @@ Express.js for building the web server
 bcrypt.js for secure password hashing
 EJS for rendering views
 PostgreSQL as the database solution
+
+Contributing
+Feel free to fork this repository, make improvements, and create a pull request. Your contributions are welcomed!

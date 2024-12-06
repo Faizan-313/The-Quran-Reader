@@ -8,19 +8,26 @@
 </head>
 <body class="surah_body">
     <%- include("../partials/navbar.ejs") %>
-    <div class="action-buttons">
-        <form action="/saveSurah" method="POST">
-            <input type="hidden" name="surahId" value="<%= surahId %>">
-            <input type="hidden" name="noOfAyahs" value="<%= noOfAyahs %>">
-            <button type="submit" class="save-button">Mark as Saved</button>
-        </form>
-    </div>
     <div class="surah-container">
-        <header class="surah-header">
-            <h1><%= surahName %></h1>
-            <p><strong>Number of Ayahs:</strong> <%= noOfAyahs %></p>
-        </header>
-        
+        <div  class="bookmark" id="bookmark-icons">
+            <% if(!marked){ %>
+                <div class="bookmark-icon" id="Not-added"  onclick="savesurah()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#bbbdc4"><path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z"/></svg>
+                </div>
+            <% }else{ %>
+                <div class="bookmark-icon" id="added"  onclick="alreadySaved()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#020710"><path d="M713-600 600-713l56-57 57 57 141-142 57 57-198 198ZM200-120v-640q0-33 23.5-56.5T280-840h280q-20 30-30 57.5T520-720q0 72 45.5 127T680-524q23 3 40 3t40-3v404L480-240 200-120Z"/></svg>
+                </div>
+            <% } %>
+        </div>
+
+
+        <div class="surah-header">
+            <header>
+                <h1><%= surahName %></h1>
+                <p><strong>Number of Ayahs:</strong> <%= noOfAyahs %></p>
+            </header>
+        </div>
         <div class="surah-content">
             <% surahContent.forEach((ayah, index) => { %>
                 <div class="ayah-line">
@@ -29,5 +36,12 @@
             <% }); %>
         </div>
     </div>
+    <script>
+        const data = {
+            surahId: "<%= surahId %>",
+            noOfAyahs: "<%= noOfAyahs %>",
+        };
+    </script>
+    <script src="/saved.js"></script>
 </body>
 </html>

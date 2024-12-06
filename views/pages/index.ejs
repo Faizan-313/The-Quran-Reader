@@ -7,8 +7,8 @@
         <table class="surah-table">
             <thead>
                 <tr>
-                    <th>Surah Name</th>
-                    <th>Number of Ayahs</th>
+                    <th>English Name</th>
+                    <th>Arabic Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,11 +16,11 @@
                     <% surahs.forEach(surah => { %>
                         <tr>
                             <td>
-                                <a href="/surah/<%= surah.surah_name %>" class="surah-link">
-                                    <%= surah.surah_name %>
+                                <a href="/surah/<%= surah.surah_english_name %>" class="surah-link">
+                                    <%= surah.surah_english_name %>
                                 </a>
                             </td>
-                            <td><%= surah.no_of_ayah %></td>
+                            <td><%= surah.surah_arabic_name%></td>
                         </tr>
                     <% }); %>
                 <% } else { %>

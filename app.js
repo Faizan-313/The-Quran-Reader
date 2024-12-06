@@ -1,5 +1,6 @@
 import express from "express";
 import router from './routes/auth.js';
+import savedRouter from './routes/saved.js';
 import session from 'express-session';
 import env from "dotenv";
 import bodyParser from "body-parser";
@@ -12,12 +13,14 @@ env.config();
 const app = express();
 const port = 3000;
 
-seedDatabase();
+seedDatabase();              //insert whole quran to the database
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
+app.use(express.json());
 
+//to save the session 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -27,7 +30,8 @@ app.use(session({
     }
 }));
 
-
+//for navbar to only show saved or all as per the current page
+let show = true;
 
 
 app.get("/login",(req, res)=>{
@@ -40,16 +44,16 @@ app.get("/register",(req,res)=>{
     res.render("pages/registration.ejs",{message});
 });
 
+//routes for authenticating the login and registration
 app.use('/auth', router);
 
-let show = true;
 
 
-
+//show the index page to the user if already login
 app.get("/", async (req, res) => {
     if (req.session.user) {
         try {
-            const result = await db.query("SELECT surah_name, no_of_ayah FROM quran"); 
+            const result = await db.query("SELECT surah_english_name, surah_arabic_name FROM quran"); 
             const surahs = result.rows;
             
             res.render("pages/index.ejs", { surahs ,show}); // Pass data to index.ejs
@@ -63,19 +67,29 @@ app.get("/", async (req, res) => {
 });
 
 
+
+//display the surah to the user when clicked on a particular surah
 app.get("/surah/:surahName", async (req,res)=>{
     const surahname = req.params.surahName;
     try{
-        const content = await db.query("SELECT surah_id, no_of_ayah, surah_content FROM quran WHERE surah_name = $1",
+        let added = false;
+        const content = await db.query("SELECT surah_no, surah_english_name, surah_content FROM surah WHERE surah_english_name = $1",
             [surahname]);
             if (content.rows.length > 0) {
                 const surah = content.rows[0];
-                const surahContent = (surah.surah_content).split("◌");
+                const surahContent = (surah.surah_content).split(",");
+                const present = await db.query("select * from user_saved where surah_no = $1",[surah.surah_id]);
+                if(present.rows.length != 0){
+                    added = true;
+                }
+                const no_of_ayah = await db.query("select no_of_ayah from quran where surah_no = $1",[surah.no_of_ayah]);
                 res.render("pages/surah.ejs", {
                     surahName: surahname,
-                    noOfAyahs: surah.no_of_ayah,
+                    noOfAyahs: no_of_ayah,
                     surahContent: surahContent,
                     surahId: surah.surah_id,
+                    marked: added,
+                    show: "both",
                 });
             } else {
                 res.status(404).send("Surah not found");
@@ -86,18 +100,22 @@ app.get("/surah/:surahName", async (req,res)=>{
     }
 });
 
+
+//get request for the index page when all is clicked
 app.get("/index",(req,res)=>{
     res.redirect("/");
 });
 
+//get request for the saved page  when saved is clicked
 app.get("/saved", async (req,res)=>{
     const user_id = req.session.user?.id;
+    show = false;
     try{
-        const result = await db.query("select quran.surah_name, quran.no_of_ayah from quran inner join user_saved on quran.surah_id=user_saved.surah_id where user_saved.user_id = $1",[user_id]);
+        const result = await db.query("select quran.surah_english_name, quran.no_of_ayah from quran inner join user_saved on quran.surah_no=user_saved.surah_no where user_saved.user_id = $1",[user_id]);
         if(result.rows.length > 0){
-            res.render("pages/saved",{surahs: result.rows, message: null});
+            res.render("pages/saved",{surahs: result.rows, message: null,show});
         }else{
-            res.render("pages/saved",{surahs: [],message: "No saved data"});
+            res.render("pages/saved",{surahs: [],message: "No saved data",show});
         }
     }catch(err){
         console.log(err);
@@ -105,46 +123,7 @@ app.get("/saved", async (req,res)=>{
     }
 });
 
-
-
-app.post("/saveSurah",async (req,res)=>{
-    const {surahId,noOfAyahs} = req.body;
-    const userId = req.session.user?.id;
-    if (!userId) {
-        return res.redirect('/login'); 
-    }
-    try{
-        const existing = await db.query("select * from user_saved where user_id = $1 and surah_id=$2",[userId,surahId]);
-        if(existing.rows.length>0){
-            return res.send(`
-                <html>
-                <head>
-                    <title>Surah Already Saved</title>
-                    <link rel="stylesheet" href="/style/message.css">
-                </head>
-                <body>
-                    <div class="message-container">
-                        <h1>This Surah is already saved.</h1>
-                        <a href="/saved">Go to Saved</a>
-                    </div>
-                </body>
-                </html>
-            `);        }else{
-            await db.query(
-                'INSERT INTO user_saved (user_id, surah_id, no_of_ayah) VALUES ($1, $2, $3)',
-                [userId, surahId, noOfAyahs]
-            );
-    
-            res.redirect('/saved');
-        }
-
-    }catch(err){
-        console.log(err);
-        res.status(500).send("an error occurred while saving data");
-    }
-});
-
-
+app.use('/savedSurah', savedRouter);
 
 
 app.listen(port, ()=>{

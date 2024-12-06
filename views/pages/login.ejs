@@ -9,7 +9,7 @@
     <div class="container" id="login-page">
         <% if (message) { %>
             <div class="alert">
-                <h3><%= message %></h3>
+                <h3 class="invalid-credentials"><%= message %></h3>
             </div>
         <% } %>
         <form action="/auth/login" method="POST">

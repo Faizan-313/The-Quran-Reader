@@ -3,6 +3,7 @@ import db from "../models/db.js";
 
 export const addBookmark = async (req,res)=>{
     const {surahId,noOfAyahs} = req.body;
+
     const userId = req.session.user?.id;
     if (!userId) {
         return res.redirect('/login'); 

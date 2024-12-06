@@ -82,12 +82,13 @@ app.get("/surah/:surahName", async (req,res)=>{
                 if(present.rows.length != 0){
                     added = true;
                 }
-                const no_of_ayah = await db.query("select no_of_ayah from quran where surah_no = $1",[surah.no_of_ayah]);
+                const ayats = await db.query("SELECT no_of_ayah FROM quran WHERE surah_no = $1", [surah.surah_no]);
+                const no_of_ayah = ayats.rows[0]?.no_of_ayah;
                 res.render("pages/surah.ejs", {
                     surahName: surahname,
                     noOfAyahs: no_of_ayah,
                     surahContent: surahContent,
-                    surahId: surah.surah_id,
+                    surahId: surah.surah_no,
                     marked: added,
                     show: "both",
                 });

@@ -53,6 +53,7 @@ app.use('/auth', router);
 app.get("/", async (req, res) => {
     if (req.session.user) {
         try {
+            show = true;
             const result = await db.query("SELECT surah_english_name, surah_arabic_name FROM quran"); 
             const surahs = result.rows;
             
@@ -71,27 +72,34 @@ app.get("/", async (req, res) => {
 //display the surah to the user when clicked on a particular surah
 app.get("/surah/:surahName", async (req,res)=>{
     const surahname = req.params.surahName;
+    const userId = req.session.user?.id;
     try{
-        let added = false;
         const content = await db.query("SELECT surah_no, surah_english_name, surah_content FROM surah WHERE surah_english_name = $1",
             [surahname]);
             if (content.rows.length > 0) {
                 const surah = content.rows[0];
+                
                 const surahContent = (surah.surah_content).split(",");
-                const present = await db.query("select * from user_saved where surah_no = $1",[surah.surah_id]);
-                if(present.rows.length != 0){
-                    added = true;
-                }
-                const ayats = await db.query("SELECT no_of_ayah FROM quran WHERE surah_no = $1", [surah.surah_no]);
-                const no_of_ayah = ayats.rows[0]?.no_of_ayah;
-                res.render("pages/surah.ejs", {
-                    surahName: surahname,
-                    noOfAyahs: no_of_ayah,
-                    surahContent: surahContent,
-                    surahId: surah.surah_no,
-                    marked: added,
-                    show: "both",
-                });
+                //for already saved surah
+                let added = false;
+                try{
+                    const present = await db.query("select * from user_saved where surah_no = $1 and user_id = $2",[surah.surah_no,userId]);
+                    if(present.rows.length > 0){
+                        added = true;
+                    }
+                    const ayats = await db.query("SELECT no_of_ayah FROM quran WHERE surah_no = $1", [surah.surah_no]);
+                    const no_of_ayah = ayats.rows[0]?.no_of_ayah;
+                    res.render("pages/surah.ejs", {
+                        surahName: surahname,
+                        noOfAyahs: no_of_ayah,
+                        surahContent: surahContent,
+                        surahId: surah.surah_no,
+                        marked: added,
+                        show: "both",
+                    });
+                }catch(error){
+                    res.status(500).send('An error occurred while loading the Surah.');
+            }
             } else {
                 res.status(404).send("Surah not found");
             }

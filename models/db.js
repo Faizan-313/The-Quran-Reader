@@ -9,7 +9,7 @@ const db = new pg.Client({
     user: process.env.PG_USER,
     database: process.env.PG_DATABASE,
     password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT,
+    port: parseInt(process.env.PG_PORT),
 });
 
 export default db;

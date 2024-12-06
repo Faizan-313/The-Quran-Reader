@@ -4,7 +4,7 @@ import savedRouter from './routes/saved.js';
 import session from 'express-session';
 import env from "dotenv";
 import bodyParser from "body-parser";
-import seedDatabase from "./seed.js";
+// import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
 
@@ -13,7 +13,7 @@ env.config();
 const app = express();
 const port = 3000;
 
-seedDatabase();              //insert whole quran to the database
+// seedDatabase();              //insert whole quran to the database
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -58,7 +58,7 @@ app.get("/", async (req, res) => {
             
             res.render("pages/index.ejs", { surahs ,show}); // Pass data to index.ejs
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             res.status(500).send("Error loading surahs");
         }
     } else {
@@ -95,7 +95,7 @@ app.get("/surah/:surahName", async (req,res)=>{
                 res.status(404).send("Surah not found");
             }
     } catch (err) {
-        console.error(err);
+        // console.error(err);
         res.status(500).send("Server error");
     }
 });
@@ -118,7 +118,7 @@ app.get("/saved", async (req,res)=>{
             res.render("pages/saved",{surahs: [],message: "No saved data",show});
         }
     }catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(500).send("An error occurred while retrieving saved Surahs.");
     }
 });

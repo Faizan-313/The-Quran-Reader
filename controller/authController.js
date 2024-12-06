@@ -25,7 +25,7 @@ export const registerUser = async (req, res)=>{
     else{
         bcrypt.hash(password,saltround,async (err,hash)=>{
             if(err){
-                console.log(err);
+                // console.log(err);
                 return res.status(500).send("Unable to store the password");
             }else{
                 await db.query("insert into user_data (username,email,password_hash) values ($1,$2,$3)",[username,email,hash]);

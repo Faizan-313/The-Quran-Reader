@@ -14,7 +14,7 @@ export const addBookmark = async (req,res)=>{
         );
         res.status(200).end();
     }catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(500).send("an error occurred while saving data");
     }
 };
@@ -32,7 +32,7 @@ export const deleteSaved = async (req, res)=>{
         );
         res.status(200).end();
     }catch(error){
-        console.log(error);
+        // console.log(error);
         res.status(500).send("An error occurred while deleting the data");
     }
 }

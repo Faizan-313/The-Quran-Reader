@@ -60,10 +60,9 @@ body .navbody{
 
 
 @media screen and (max-width: 768px) {
-    .navbar {
+    .navbar-links {
         flex-direction: row;
-        gap: 20px;
-        background-color: rgb(87, 121, 87);
+        gap: 10px;
     }
     .nav-link {
         margin: 10px 0; 
@@ -161,5 +160,5 @@ footer {
     .logo-image{
         height: 4rem;
     }
-    
+
 }

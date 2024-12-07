@@ -135,6 +135,15 @@ app.get("/saved", async (req,res)=>{
 app.use('/savedSurah', savedRouter);
 
 
+app.get("/logout",(req, res)=>{
+    req.session.destroy((err)=>{
+        if(err){
+            return res.send("Error logging out");
+        }
+        res.redirect("/login");
+    });
+});
+
 app.listen(port, ()=>{
     console.log(`Server running on port ${port}`);
 });

@@ -52,10 +52,10 @@ button:hover {
 @media screen and (max-width: 768px) 
 {
     .container{
-        height: 76vh;
+        height: 74vh;
     }
     form {
-        margin: 35% 0 30px 0;
+        margin: 31% 0 30px 0;
     }
 }
 

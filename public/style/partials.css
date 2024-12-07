@@ -157,3 +157,9 @@ footer {
     height: 8rem; /* adjust as needed */
     width: auto;
 }
+@media screen and (max-width: 768px) {
+    .logo-image{
+        height: 4rem;
+    }
+    
+}

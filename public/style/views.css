@@ -49,3 +49,13 @@ button:hover {
     background-color: #45a049;
 }
 
+@media screen and (max-width: 768px) 
+{
+    .container{
+        height: 76vh;
+    }
+    form {
+        margin: 35% 0 30px 0;
+    }
+}
+

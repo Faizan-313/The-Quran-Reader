@@ -4,7 +4,7 @@ import savedRouter from './routes/saved.js';
 import session from 'express-session';
 import env from "dotenv";
 import bodyParser from "body-parser";
-import seedDatabase from "./seed.js";
+// import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
 
@@ -13,7 +13,7 @@ env.config();
 const app = express();
 const port = 3000;
 
-seedDatabase();              //insert whole quran to the database
+// seedDatabase();              //insert whole quran to the database
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));

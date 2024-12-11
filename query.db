@@ -31,4 +31,11 @@ create table surah(
 	foreign key (surah_english_name) references quran(surah_english_name) on delete cascade
 );
 
+create table surah_font(
+    id serial primary key,
+    surah_no int not null,
+    surah_arabic1 text not null,
+    foreign key (surah_no) references surah(surah_no) on delete cascade
+);
+
 

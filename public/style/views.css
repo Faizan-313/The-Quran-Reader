@@ -16,7 +16,7 @@ body {
 }
 
 
-form {
+.start-form {
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;

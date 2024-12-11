@@ -4,7 +4,7 @@ import savedRouter from './routes/saved.js';
 import session from 'express-session';
 import env from "dotenv";
 import bodyParser from "body-parser";
-// import seedDatabase from "./seed.js";
+import seedDatabase from "./seed.js";
 import db from "./models/db.js";
 
 
@@ -13,7 +13,7 @@ env.config();
 const app = express();
 const port = 3000;
 
-// seedDatabase();              //insert whole quran to the database
+seedDatabase();              //insert whole quran to the database
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -48,7 +48,6 @@ app.get("/register",(req,res)=>{
 app.use('/auth', router);
 
 
-
 //show the index page to the user if already login
 app.get("/", async (req, res) => {
     if (req.session.user) {
@@ -68,43 +67,57 @@ app.get("/", async (req, res) => {
 });
 
 
+app.get("/font", async (req,res)=>{
+    const {fonts} = req.query;
+    const surahName = req.query.surahName;
+    res.redirect(`/surah/${surahName}?font=${fonts}`);
+});
 
 //display the surah to the user when clicked on a particular surah
 app.get("/surah/:surahName", async (req,res)=>{
     const surahname = req.params.surahName;
     const userId = req.session.user?.id;
+    const font_value = req.query.font || "default"; 
+    let content;
     try{
-        const content = await db.query("SELECT surah_no, surah_english_name, surah_content FROM surah WHERE surah_english_name = $1",
-            [surahname]);
-            if (content.rows.length > 0) {
-                const surah = content.rows[0];
-                
-                const surahContent = (surah.surah_content).split(",");
-                //for already saved surah
-                let added = false;
-                try{
-                    const present = await db.query("select * from user_saved where surah_no = $1 and user_id = $2",[surah.surah_no,userId]);
-                    if(present.rows.length > 0){
-                        added = true;
-                    }
-                    const ayats = await db.query("SELECT no_of_ayah FROM quran WHERE surah_no = $1", [surah.surah_no]);
-                    const no_of_ayah = ayats.rows[0]?.no_of_ayah;
-                    res.render("pages/surah.ejs", {
-                        surahName: surahname,
-                        noOfAyahs: no_of_ayah,
-                        surahContent: surahContent,
-                        surahId: surah.surah_no,
-                        marked: added,
-                        show: "both",
-                    });
-                }catch(error){
-                    res.status(500).send('An error occurred while loading the Surah.');
+        if(font_value === "default"){
+            content = await db.query("SELECT surah_no, surah_english_name, surah_content FROM surah WHERE surah_english_name = $1",
+                [surahname]);
+        }
+        else{
+            content = await db.query("select surah.surah_no, surah.surah_english_name, surah_font.surah_arabic1 from surah join surah_font on surah.surah_no = surah_font.surah_no where surah.surah_english_name = $1",
+                [surahname]);
+        }
+        if (content.rows.length > 0) {
+            const surah = content.rows[0];
+            
+            const surahContent = (font_value === "default") ? (surah.surah_content).split(",") : (surah.surah_arabic1).split(",");
+            //for already saved surah
+            let added = false;
+            try{
+                const present = await db.query("select * from user_saved where surah_no = $1 and user_id = $2",[surah.surah_no,userId]);
+                if(present.rows.length > 0){
+                    added = true;
+                }
+                const ayats = await db.query("SELECT no_of_ayah FROM quran WHERE surah_no = $1", [surah.surah_no]);
+                const no_of_ayah = ayats.rows[0]?.no_of_ayah;
+                res.render("pages/surah.ejs", {
+                    surahName: surahname,
+                    noOfAyahs: no_of_ayah,
+                    surahContent: surahContent,
+                    surahId: surah.surah_no,
+                    marked: added,
+                    show: "both",
+                    font_value : font_value,
+                });
+            }catch(error){
+                res.status(500).send('An error occurred while loading the Surah.');
             }
-            } else {
-                res.status(404).send("Surah not found");
-            }
+        } else {
+            res.status(404).send("Surah not found");
+        }
     } catch (err) {
-        // console.error(err);
+        console.error(err);
         res.status(500).send("Server error");
     }
 });

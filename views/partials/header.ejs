@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="/style/partials.css">
     <link rel="stylesheet" href="/style/views.css">
     <link rel="stylesheet" href="/style/theme.css">
+    <script type="module">
+        import { createNightowl } from '@bufferhead/nightowl'
+    
+        createNightowl({
+            defaultMode: 'light',
+            toggleButtonMode: 'newState'
+        })
+    </script>
 </head>
 <body>
     <header class="login-header">
@@ -18,7 +26,7 @@
     <!-- for darkmode -->
     <script
         type="module"
-        src="https://cdn.jsdelivr.net/npm/@bufferhead/nightowl@0.0.14/dist/nightowl.js"
-></script>
+        src="https://cdn.jsdelivr.net/npm/@bufferhead/nightowl@0.0.14/dist/nightowl.js">
+    </script>
 </body>
 </html>

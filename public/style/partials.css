@@ -62,7 +62,7 @@ body .navbody{
     .navbar-links {
         background-color: white;
         flex-direction: row;
-        gap: 10px;
+        gap: 15px;
         margin-right: 6.5rem;
     }
     .nav-link {

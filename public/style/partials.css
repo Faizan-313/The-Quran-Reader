@@ -17,7 +17,7 @@ body .navbody{
     justify-content:end; 
     align-items: center; 
     padding: 10px; 
-    margin-right: 10px;
+    margin-right: 5rem;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -51,7 +51,7 @@ body .navbody{
     justify-content: flex-start;
 }
 .nav-logo-image {
-    height: 4rem; 
+    height: 5rem; 
     width: auto;
 }
 
@@ -62,10 +62,15 @@ body .navbody{
     .navbar-links {
         background-color: white;
         flex-direction: row;
-        gap: 22px;
+        gap: 10px;
+        margin-right: 6.5rem;
     }
     .nav-link {
-        margin: 10px 0; 
+        margin: 10px 0;
+        font-size:medium; 
+    }
+    .nav-logo-image{
+        height: 4.5rem;
     }
 }
 
@@ -160,5 +165,6 @@ footer {
     .logo-image{
         height: 4rem;
     }
-
 }
+
+
